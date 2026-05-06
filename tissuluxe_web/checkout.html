@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout - TissuLuxe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main>
+  <section class="page-hero"><p class="eyebrow">Accueil / Panier / Informations</p><h1>Informations de livraison</h1><p>Renseignez l'adresse, le mode de livraison et appliquez un coupon si disponible.</p></section>
+  <section class="checkout-progress section" aria-label="Étapes de paiement">
+    <div class="active"><span>1</span><strong>Informations</strong></div>
+    <div><span>2</span><strong>Livraison</strong></div>
+    <div><span>3</span><strong>Paiement</strong></div>
+  </section>
+  <section class="section checkout-layout checkout-screen">
+    <div class="panel">
+      <h2>Informations de livraison</h2>
+      <form class="form-grid" data-checkout-form>
+        <input name="customer_name" type="text" placeholder="Nom complet" required>
+        <input name="email" type="email" placeholder="Email" required>
+        <input name="phone" type="tel" placeholder="Téléphone" required>
+        <textarea name="address" placeholder="Adresse complète" required></textarea>
+        <input name="city" type="text" placeholder="Ville" required>
+        <input name="postal_code" type="text" placeholder="Code postal" >
+        <input name="country" type="text" placeholder="Pays" value="Maroc">
+        <select name="delivery_method"><option value="standard">Livraison standard</option><option value="express">Livraison express</option></select>
+        <select name="payment_method"><option value="cash_on_delivery">Paiement à la livraison</option><option value="card">Carte bancaire simulée</option></select>
+        <button class="btn btn-primary" type="submit">Continuer au paiement</button>
+      </form>
+    </div>
+    <aside class="summary order-summary"><h2>Récapitulatif de la commande</h2><form data-coupon-form class="form-grid"><input name="code" placeholder="Coupon WELCOME10"><button class="btn btn-gold" type="submit">Appliquer</button></form><div data-checkout-summary></div></aside>
+  </section>
+</main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/wishlist.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

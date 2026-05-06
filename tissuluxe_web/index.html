@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accueil - TissuLuxe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main>
+  <section class="home-hero">
+    <div class="home-hero-content">
+      <p class="eyebrow">Soldes d'été</p>
+      <h1>Jusqu'à 50% de réduction</h1>
+      <p>Sur une sélection de tissus fleuris, caftan et décoration intérieure.</p>
+      <a class="btn btn-light" href="liste-produits.html">Découvrir maintenant <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="hero-badge">Offre limitée<br><span>dans le temps</span></div>
+    <div class="hero-dots" aria-hidden="true"><span class="active"></span><span></span><span></span><span></span></div>
+  </section>
+
+  <section class="trust-strip" aria-label="Services TissuLuxe">
+    <div><i class="fas fa-truck-fast"></i><strong>Livraison gratuite</strong><span>À partir de 500 MAD</span></div>
+    <div><i class="fas fa-lock"></i><strong>Paiements sécurisés</strong><span>Paiement 100% sécurisé</span></div>
+    <div><i class="fas fa-cube"></i><strong>Retours faciles</strong><span>30 jours pour changer d'avis</span></div>
+    <div><i class="fas fa-headset"></i><strong>Support 24/7</strong><span>Nous sommes là pour vous</span></div>
+  </section>
+
+  <section class="home-showcase section">
+    <aside class="promo-stack">
+      <a class="promo-card warm" href="liste-produits.html?sort=best">
+        <span>Offre du jour</span>
+        <strong>Des prix spéciaux sur une sélection de tissus</strong>
+        <small>Voir l'offre <i class="fas fa-arrow-right"></i></small>
+        <img src="images/products/fabric-07.jpg" alt="">
+      </a>
+      <a class="promo-card cool" href="liste-produits.html?sort=newest">
+        <span>Nouveautés</span>
+        <strong>Découvrez nos derniers tissus</strong>
+        <small>Voir tout <i class="fas fa-arrow-right"></i></small>
+        <img src="images/products/fabric-04.jpg" alt="">
+      </a>
+    </aside>
+    <div class="featured-panel">
+      <div class="section-head compact">
+        <div>
+          <h2>Tissus en vedette</h2>
+          <p>Les tissus premium les plus appréciés par nos clientes et ateliers partenaires.</p>
+        </div>
+        <a class="see-link" href="liste-produits.html">Voir tout <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="product-grid featured-grid" data-featured></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>Toutes les catégories</h2>
+        <p>Des familles claires pour trouver rapidement la matière adaptée à votre projet.</p>
+      </div>
+      <a class="btn btn-secondary" href="categories.html">Voir les catégories</a>
+    </div>
+    <div class="category-grid" data-categories></div>
+  </section>
+
+  <section class="newsletter-band section">
+    <div class="newsletter-copy">
+      <i class="far fa-envelope"></i>
+      <div>
+        <h2>Profitez de 10% de réduction sur votre première commande !</h2>
+        <p>Inscrivez-vous à notre newsletter et recevez nos offres exclusives.</p>
+      </div>
+    </div>
+    <form class="newsletter-form">
+      <input type="email" placeholder="Votre adresse e-mail" aria-label="Votre adresse e-mail">
+      <button class="btn btn-primary" type="submit">S'inscrire</button>
+    </form>
+  </section>
+</main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/wishlist.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

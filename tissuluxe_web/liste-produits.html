@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Produits - TissuLuxe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main>
+  <section class="page-hero catalog-title"><p class="eyebrow">Accueil / Boutique</p><h1>Tissus Fleuris</h1><p>Découvrez notre collection de tissus aux motifs élégants et intemporels.</p></section>
+  <section class="section catalog-layout">
+    <aside class="catalog-sidebar">
+      <div class="filter-heading"><h2>Filtrer les produits</h2><a href="liste-produits.html">Réinitialiser</a></div>
+      <form class="filters" data-product-filters>
+        <label>Recherche<input name="search" type="text" placeholder="Nom, couleur, motif"></label>
+        <label>Catégorie<select name="category"><option value="">Toutes les catégories</option></select></label>
+        <div class="filter-range">
+          <label>Prix min<input name="min" type="number" placeholder="20" min="0"></label>
+          <label>Prix max<input name="max" type="number" placeholder="260" min="0"></label>
+        </div>
+        <label>Couleur<input name="color" type="text" placeholder="Bleu, violet, doré"></label>
+        <label>Motif<input name="pattern" type="text" placeholder="Fleurs, caftan, jacquard"></label>
+        <label>Disponibilité<select name="available"><option value="">Tous les produits</option><option value="true">En stock uniquement</option></select></label>
+        <label>Trier par<select name="sort"><option value="newest">Nouveautés</option><option value="price_asc">Prix croissant</option><option value="price_desc">Prix décroissant</option><option value="best">Meilleures ventes</option></select></label>
+        <button class="btn btn-primary" type="submit">Appliquer les filtres</button>
+      </form>
+    </aside>
+    <div class="catalog-content">
+      <div class="catalog-toolbar"><span>128 produits trouvés</span><div><button class="icon-square active" type="button"><i class="fas fa-grip"></i></button><button class="icon-square" type="button"><i class="fas fa-list"></i></button></div></div>
+      <div class="product-grid" data-products-grid></div>
+      <nav class="pagination" data-pagination></nav>
+    </div>
+  </section>
+</main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/wishlist.js"></script>
+  <script src="js/checkout.js"></script>
+  <script src="js/orders.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>
