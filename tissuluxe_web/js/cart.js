@@ -47,6 +47,8 @@
     const remove = event.target.closest("[data-cart-remove]");
     const clear = event.target.closest("[data-cart-clear]");
     try {
+      if (remove) remove.disabled = true;
+      if (clear) clear.disabled = true;
       if (remove) await apiDelete(`/cart/${remove.dataset.cartRemove}`);
       if (clear) await apiDelete("/cart");
       if (remove || clear) {
@@ -55,6 +57,8 @@
       }
     } catch (err) {
       notify(err.message, "error");
+      if (remove) remove.disabled = false;
+      if (clear) clear.disabled = false;
     }
   });
 

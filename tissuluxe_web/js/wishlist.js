@@ -26,16 +26,23 @@
     const remove = event.target.closest("[data-fav-remove]");
     try {
       if (add) {
+        if (add.disabled) return;
+        add.disabled = true;
         await apiPost("/cart", { product_id: add.dataset.favCart, quantity: 1 });
         notify("Favori ajouté au panier");
+        add.disabled = false;
       }
       if (remove) {
+        if (remove.disabled) return;
+        remove.disabled = true;
         await apiDelete(`/wishlist/${remove.dataset.favRemove}`);
         notify("Favori supprimé");
         loadWishlist();
       }
     } catch (err) {
       notify(err.message, "error");
+      if (add) add.disabled = false;
+      if (remove) remove.disabled = false;
     }
   });
 

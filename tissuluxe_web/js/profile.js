@@ -81,13 +81,24 @@
     const address = event.target.closest("[data-address-form]");
     if (!profile && !address) return;
     event.preventDefault();
+    const form = profile || address;
+    const submit = form.querySelector("button[type='submit']");
     try {
+      if (submit) {
+        submit.disabled = true;
+        submit.dataset.originalText = submit.textContent;
+        submit.textContent = "Enregistrement...";
+      }
       if (profile) await apiPut("/users/profile", Object.fromEntries(new FormData(profile).entries()));
       if (address) await apiPost("/users/addresses", Object.fromEntries(new FormData(address).entries()));
       notify(profile ? "Profil mis à jour" : "Adresse ajoutée");
       loadProfile();
     } catch (err) {
       notify(err.message, "error");
+      if (submit) {
+        submit.disabled = false;
+        submit.textContent = submit.dataset.originalText || "Réessayer";
+      }
     }
   });
 
@@ -95,11 +106,13 @@
     const button = event.target.closest("[data-delete-address]");
     if (!button) return;
     try {
+      button.disabled = true;
       await apiDelete(`/users/addresses/${button.dataset.deleteAddress}`);
       notify("Adresse supprimée");
       loadProfile();
     } catch (err) {
       notify(err.message, "error");
+      button.disabled = false;
     }
   });
 

@@ -5,14 +5,24 @@
     const form = event.target.closest("[data-login-form], [data-register-form]");
     if (!form) return;
     event.preventDefault();
+    const submit = form.querySelector("button[type='submit'], button:not([type])");
     const data = Object.fromEntries(new FormData(form).entries());
     try {
+      if (submit) {
+        submit.disabled = true;
+        submit.dataset.originalText = submit.textContent;
+        submit.textContent = "Veuillez patienter...";
+      }
       const result = await apiPost(form.matches("[data-register-form]") ? "/auth/register" : "/auth/login", data);
       setSession(result);
       notify("Bienvenue chez TissuLuxe");
       location.href = result.user.role === "admin" ? "../admin/dashboard.html" : "profil.html";
     } catch (err) {
       notify(err.message, "error");
+      if (submit) {
+        submit.disabled = false;
+        submit.textContent = submit.dataset.originalText || "Réessayer";
+      }
     }
   });
 

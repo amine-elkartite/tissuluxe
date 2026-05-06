@@ -2,7 +2,14 @@
   const { apiGet, apiPost, money, qs, notify, getUser } = window.TLX;
   const checkoutKey = "tlx_checkout";
 
-  const readCheckout = () => JSON.parse(localStorage.getItem(checkoutKey) || "null");
+  const readCheckout = () => {
+    try {
+      return JSON.parse(localStorage.getItem(checkoutKey) || "null");
+    } catch (_err) {
+      localStorage.removeItem(checkoutKey);
+      return null;
+    }
+  };
   const writeCheckout = (data) => localStorage.setItem(checkoutKey, JSON.stringify(data));
 
   const renderSummary = async () => {
@@ -67,7 +74,13 @@
     const coupon = event.target.closest("[data-coupon-form]");
     if (!form && !coupon) return;
     event.preventDefault();
+    const submit = (form || coupon).querySelector("button[type='submit']");
     try {
+      if (submit) {
+        submit.disabled = true;
+        submit.dataset.originalText = submit.textContent;
+        submit.textContent = "Veuillez patienter...";
+      }
       if (coupon) {
         const cart = await apiGet("/cart");
         const code = new FormData(coupon).get("code");
@@ -83,6 +96,11 @@
       }
     } catch (err) {
       notify(err.message, "error");
+    } finally {
+      if (submit) {
+        submit.disabled = false;
+        submit.textContent = submit.dataset.originalText || "Appliquer";
+      }
     }
   });
 

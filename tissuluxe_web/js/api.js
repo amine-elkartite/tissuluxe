@@ -21,10 +21,15 @@
   };
 
   async function apiRequest(path, options = {}) {
-    const response = await fetch(`${API_BASE_URL}${path}`, {
-      ...options,
-      headers: { ...headers(!(options.body instanceof FormData)), ...(options.headers || {}) }
-    });
+    let response;
+    try {
+      response = await fetch(`${API_BASE_URL}${path}`, {
+        ...options,
+        headers: { ...headers(!(options.body instanceof FormData)), ...(options.headers || {}) }
+      });
+    } catch (_err) {
+      throw new Error("API indisponible. Vérifiez que le serveur est lancé.");
+    }
     const payload = await response.json().catch(() => ({ success: false, message: "Réponse API invalide" }));
     if (!response.ok || payload.success === false) {
       throw new Error(payload.message || "Erreur API");
@@ -59,6 +64,14 @@
   const getToken = () => localStorage.getItem(tokenKey);
   const setToken = (token) => localStorage.setItem(tokenKey, token);
   const removeToken = () => localStorage.removeItem(tokenKey);
+  const readJson = (key) => {
+    try {
+      return JSON.parse(localStorage.getItem(key) || "null");
+    } catch (_err) {
+      localStorage.removeItem(key);
+      return null;
+    }
+  };
 
   window.TLX = {
     apiGet: (path) => apiRequest(path),
@@ -76,7 +89,7 @@
     qsa,
     asset,
     notify,
-    getUser: () => JSON.parse(localStorage.getItem(userKey) || "null"),
+    getUser: () => readJson(userKey),
     setSession: (data) => {
       setToken(data.token);
       localStorage.setItem(userKey, JSON.stringify(data.user));

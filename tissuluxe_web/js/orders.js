@@ -105,7 +105,14 @@
     const contact = event.target.closest("[data-contact-form]");
     if (!tracking && !contact) return;
     event.preventDefault();
+    const form = tracking || contact;
+    const submit = form.querySelector("button[type='submit'], button:not([type])");
     try {
+      if (submit) {
+        submit.disabled = true;
+        submit.dataset.originalText = submit.textContent;
+        submit.textContent = "Veuillez patienter...";
+      }
       if (tracking) {
         const number = new FormData(tracking).get("order");
         history.replaceState(null, "", `?order=${encodeURIComponent(number)}`);
@@ -118,6 +125,11 @@
       }
     } catch (err) {
       notify(err.message, "error");
+    } finally {
+      if (submit) {
+        submit.disabled = false;
+        submit.textContent = submit.dataset.originalText || "Réessayer";
+      }
     }
   });
 

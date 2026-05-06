@@ -1,6 +1,22 @@
 (() => {
   const { apiGet, apiPost, money, asset, qs, qsa, notify } = window.TLX;
 
+  const fallbackCategories = [
+    { name: "Tissus Fleuris", slug: "tissus-fleuris", image: "images/products/fabric-01.jpg", product_count: 128 },
+    { name: "Tissus Caftan", slug: "tissus-caftan", image: "images/products/fabric-04.jpg", product_count: 86 },
+    { name: "Décoration", slug: "decoration", image: "images/products/fabric-07.jpg", product_count: 93 },
+    { name: "Dentelle", slug: "dentelle", image: "images/products/fabric-05.jpg", product_count: 64 }
+  ];
+
+  const fallbackProducts = [
+    { id: 1, name: "Tissu Floral Foncé", slug: "tissu-floral-fonce", category_name: "Tissus Fleuris", main_image: "images/products/fabric-01.jpg", price: 89, old_price: 120, stock: 24 },
+    { id: 2, name: "Tissu Magnolia Violet", slug: "tissu-magnolia-violet", category_name: "Tissus Fleuris", main_image: "images/products/fabric-02.jpg", price: 95, old_price: 130, stock: 18 },
+    { id: 3, name: "Tissu Fleurs Marron & Blanc", slug: "tissu-fleurs-marron-blanc", category_name: "Tissus Fleuris", main_image: "images/products/fabric-03.jpg", price: 85, old_price: 110, stock: 21 },
+    { id: 4, name: "Tissu Baroque Bleu & Orange", slug: "tissu-baroque-bleu-orange", category_name: "Tissus Caftan", main_image: "images/products/fabric-04.jpg", price: 110, old_price: 160, stock: 7 },
+    { id: 5, name: "Tissu Floral Dentelle Violet", slug: "tissu-floral-dentelle-violet", category_name: "Dentelle", main_image: "images/products/fabric-05.jpg", price: 120, old_price: 160, stock: 12 },
+    { id: 6, name: "Tissu Rose Crème", slug: "tissu-rose-creme", category_name: "Soie imprimée", main_image: "images/products/fabric-06.jpg", price: 99, old_price: 140, stock: 16 }
+  ];
+
   const productCard = (p) => `
     <article class="product-card">
       <div class="product-img-wrap product-media">
@@ -39,11 +55,14 @@
         const products = await apiGet("/products/featured");
         featured.innerHTML = products.map(productCard).join("");
       } catch (err) {
-        featured.innerHTML = fallback || emptyState("Lancez l'API pour charger les produits.");
+        featured.innerHTML = fallbackProducts.map(productCard).join("");
       }
     }
     if (cats) {
-      const categories = await apiGet("/categories");
+      let categories = fallbackCategories;
+      try {
+        categories = await apiGet("/categories");
+      } catch (_err) {}
       cats.innerHTML = categories.map(categoryCard).join("");
     }
   };
@@ -52,7 +71,10 @@
     const container = qs("[data-all-categories]");
     if (!container) return;
     container.innerHTML = skeletonCards(6);
-    const categories = await apiGet("/categories");
+    let categories = fallbackCategories;
+    try {
+      categories = await apiGet("/categories");
+    } catch (_err) {}
     container.innerHTML = categories.map(categoryCard).join("");
   };
 
@@ -67,15 +89,25 @@
         if (input) input.value = value;
       }
     }
-    const categories = await apiGet("/categories");
+    let categories = fallbackCategories;
+    try {
+      categories = await apiGet("/categories");
+    } catch (_err) {}
     const select = form?.elements.category || qs("[name='category']");
     if (select && select.options.length < 2) {
       select.insertAdjacentHTML("beforeend", categories.map((c) => `<option value="${c.slug}">${c.name}</option>`).join(""));
       if (params.get("category")) select.value = params.get("category");
     }
     grid.innerHTML = skeletonCards(8);
-    const data = await apiGet(`/products?${params.toString() || "page=1&limit=12"}`);
+    let data;
+    try {
+      data = await apiGet(`/products?${params.toString() || "page=1&limit=12"}`);
+    } catch (_err) {
+      data = { products: fallbackProducts, pagination: { pages: 1, page: 1 } };
+    }
     grid.innerHTML = data.products.map(productCard).join("") || emptyState("Aucun produit trouvé");
+    const count = qs(".catalog-toolbar span");
+    if (count) count.textContent = `${data.products.length} produits trouvés`;
     renderPagination(data.pagination);
   };
 
@@ -83,7 +115,12 @@
     const root = qs("[data-product-detail]");
     if (!root) return;
     const slug = new URLSearchParams(location.search).get("slug") || "satin-floral-royal";
-    const product = await apiGet(`/products/${slug}`);
+    let product;
+    try {
+      product = await apiGet(`/products/${slug}`);
+    } catch (_err) {
+      product = { ...fallbackProducts[0], description: "Tissu premium sélectionné par TissuLuxe.", colors: ["Noir", "Rouge"], material: "Satin", width: "150 cm", pattern: "Floral", images: [] };
+    }
     root.innerHTML = `
       <div class="detail-gallery">
         <img class="detail-main" src="${asset(product.main_image)}" alt="${product.name}">
@@ -143,17 +180,25 @@
     const wish = event.target.closest("[data-add-wishlist]");
     try {
       if (add) {
+        if (add.disabled) return;
+        add.disabled = true;
         const quantity = Number(qs("[data-qty]")?.value || 1);
         await apiPost("/cart", { product_id: add.dataset.addCart, quantity });
         notify("Produit ajouté au panier");
         document.dispatchEvent(new Event("tlx:cart-updated"));
+        add.disabled = false;
       }
       if (wish) {
+        if (wish.disabled) return;
+        wish.disabled = true;
         await apiPost("/wishlist", { product_id: wish.dataset.addWishlist });
         notify("Produit ajouté aux favoris");
+        wish.disabled = false;
       }
     } catch (err) {
       notify(err.message, "error");
+      if (add) add.disabled = false;
+      if (wish) wish.disabled = false;
     }
   });
 
